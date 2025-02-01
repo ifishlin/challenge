@@ -59,6 +59,24 @@ To submit your results, please clone this repository and make your edits. Once y
 6. How would you change the chromosome numbers in the file above to chromosome names (e.g. "chr1" instead of "1")?
     - How would you change the names back to the original? Would your solution work if an additional column containing text of arbitrary length and content is appended at the left of the file?
     - These positions are extracted from a VCF. Convert this file to the BED format.
+
+    ```
+    # bash
+    # transfer 1,2,3 to chr1, chr2, chr3
+    awk '{if ($1 !~ /^#/ && $1 !~ /^chr/) $1="chr"$1}1' input.txt > output.txt
+
+    # transfer chr1, chr2, chr3 to 1,2,3
+    awk '{if ($1 ~ /^chr/) $1=substr($1,4)}1' input.txt > output.txt
+
+    # skip first column
+    awk '{if ($2 !~ /^#/ && $2 !~ /^chr/) $2="chr"$2}1' input.txt > output.txt
+
+    # VCF to BED / or vcf2bed
+    awk 'BEGIN{OFS="\t"} !/^#/ {print $1, $2-1, $2}' input.vcf > output.bed
+    ```
+
+
+    
 7.	Download the 1000 Genomes sites VCF file for chromosome 21 [here](http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/ALL.chr21_GRCh38_sites.20170504.vcf.gz). We want to compare it to [a locally stored file](data/ALL.chr21_GRCh38_sites.20170504.vcf.gz).
     - What is the fastest way to check the integrity of, or compare, any such downloaded file?
     - If you find that the files are indeed different, how do you find their differences? Keep in mind that this kind of file can be very large (>100Gb), your solution should be as fast and memory-efficient as possible.
