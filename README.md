@@ -51,7 +51,17 @@ To submit your results, please clone this repository and make your edits. Once y
    ```
    bcftools view -G -o output_no_samples.vcf input.vcf
    ```
-3. You are the curator of a genotype dataset with a very strict privacy policy in place. In particular, it should be impossible to tell, given access to a person's genetic data, whether they were part of your study by looking at a dataset you provided. A collaborator is asking you for some data to run tests on their code. What information can you safely contribute from your study?
+3. You are the curator of a genotype dataset with a very strict privacy policy in place. In particular, it should be impossible to tell, given access to a person's genetic data, whether they were part of your study by looking at a dataset you provided. A collaborator is asking you for some data to run tests on their code. What information can you safely contribute from your study? Which data cannot be shared?
+
+    ```
+    Any direct or indirect identifiers (e.g., names, full genotype calls, rare variants) that could reveal whether a specific individual is in the study.
+    How to remove or aggregate personal data?
+
+    - Strip direct identifiers (e.g., names, IDs) from your files.
+    - Aggregate at the group level (e.g., allele or genotype frequencies) instead of providing individual-level data.
+    - If individual-level data are needed for testing, use anonymized or masked genotypes (remove rare variants, reduce resolution), or provide synthetic data that mimic     real statistics without exposing real subjects. 
+    ```
+
 4. How do you convert a gzipped VCF to the `bimbam` format? (you may choose to script a solution yourself, or not)
 5. A user sends you a small number of chromosome and positions in build 38 that they want to know the rsID of. 
     - What is missing from their request? What kind of unexpected output can they expect?
