@@ -48,6 +48,9 @@ To submit your results, please clone this repository and make your edits. Once y
     - Write a command or script to remove duplicate positions in a VCF such as [this one](data/duplicates.vcf.gz), independently of their alleles. The positions can be duplicated an arbitrary number of times. Write code to keep the first, last and a random record among each set of duplicated records.
     - Same question, but make duplicate detection allele-specific. When it finds such an exact duplicate, your code should remove all of the corresponding records.
 2. From an existing VCF with an arbitrary number of samples, how do you produce a VCF file without any samples using `bcftools`?
+   ```
+   bcftools view -G -o output_no_samples.vcf input.vcf
+   ```
 3. You are the curator of a genotype dataset with a very strict privacy policy in place. In particular, it should be impossible to tell, given access to a person's genetic data, whether they were part of your study by looking at a dataset you provided. A collaborator is asking you for some data to run tests on their code. What information can you safely contribute from your study?
 4. How do you convert a gzipped VCF to the `bimbam` format? (you may choose to script a solution yourself, or not)
 5. A user sends you a small number of chromosome and positions in build 38 that they want to know the rsID of. 
