@@ -46,7 +46,106 @@ To submit your results, please clone this repository and make your edits. Once y
 ### Bioinformatics
 1. The [VCF format](http://www.internationalgenome.org/wiki/Analysis/vcf4.0/) is a popular format to describe genetic variations in a study group. It is often used in sequencing projects. Due to size concerns, it is often compressed using `gzip` and indexed using `tabix`. A binary version, BCF, also exists.
     - Write a command or script to remove duplicate positions in a VCF such as [this one](data/duplicates.vcf.gz), independently of their alleles. The positions can be duplicated an arbitrary number of times. Write code to keep the first, last and a random record among each set of duplicated records.
+      
+   ```python
+    #!/usr/bin/env python3
+
+    import sys
+    import random
+
+    def main():
+        header_lines = []
+        records_dict = {}
+    
+        # Read lines from stdin
+        for line in sys.stdin:
+            line = line.rstrip('\n')
+            # Lines starting with '#' are headers/comments, store them
+            if line.startswith('#'):
+                header_lines.append(line)
+            else:
+                fields = line.split('\t')
+                chrom = fields[0]
+                pos   = fields[1]
+                key   = (chrom, pos)
+                if key not in records_dict:
+                    records_dict[key] = []
+                records_dict[key].append(line)
+    
+        # For each set of duplicates, keep the first, last, and a random record
+        output_lines = []
+        for key, lines in records_dict.items():
+            if len(lines) == 1:
+                # If only one record, just keep it
+                output_lines.append(lines[0])
+            else:
+                first_line = lines[0]
+                last_line  = lines[-1]
+                random_line = random.choice(lines)
+    
+                # Use a set to avoid duplicates if random_line == first_line or last_line
+                unique_lines = {first_line, last_line, random_line}
+                output_lines.extend(unique_lines)
+    
+        # Print header lines, then deduplicated records
+        for h in header_lines:
+            print(h)
+        for line in output_lines:
+            print(line)
+    
+    if __name__ == '__main__':
+        main()
+
+   ```
     - Same question, but make duplicate detection allele-specific. When it finds such an exact duplicate, your code should remove all of the corresponding records.
+
+   ```python
+    #!/usr/bin/env python3
+    
+    import sys
+    
+    def main():
+        header_lines = []
+        # Dictionary to store (CHROM, POS, REF, ALT) -> list of corresponding lines
+        variant_dict = {}
+    
+        # Read lines from stdin
+        for line in sys.stdin:
+            line = line.rstrip('\n')
+            if line.startswith('#'):
+                # Store header or comment lines
+                header_lines.append(line)
+            else:
+                fields = line.split('\t')
+                chrom = fields[0]
+                pos   = fields[1]
+                ref   = fields[3]
+                alt   = fields[4]
+                key   = (chrom, pos, ref, alt)
+                
+                if key not in variant_dict:
+                    variant_dict[key] = []
+                variant_dict[key].append(line)
+    
+        output_lines = []
+        # For each (CHROM, POS, REF, ALT) group:
+        #  - If there's only 1 record, keep it.
+        #  - If there are multiple records (exact duplicates), remove them all.
+        for key, lines in variant_dict.items():
+            if len(lines) == 1:
+                output_lines.append(lines[0])
+            # If len(lines) > 1, we do nothing (i.e., remove them all).
+    
+        # Print headers first, then the filtered records
+        for header in header_lines:
+            print(header)
+        for record in output_lines:
+            print(record)
+    
+    if __name__ == '__main__':
+        main()
+    ```
+      
 2. From an existing VCF with an arbitrary number of samples, how do you produce a VCF file without any samples using `bcftools`?
    ```
    bcftools view -G -o output_no_samples.vcf input.vcf
