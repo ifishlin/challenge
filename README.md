@@ -172,8 +172,7 @@ To submit your results, please clone this repository and make your edits. Once y
     - How would you change the names back to the original? Would your solution work if an additional column containing text of arbitrary length and content is appended at the left of the file?
     - These positions are extracted from a VCF. Convert this file to the BED format.
 
-    ```
-    # bash
+    ```bash
     # transfer 1,2,3 to chr1, chr2, chr3
     awk '{if ($1 !~ /^#/ && $1 !~ /^chr/) $1="chr"$1}1' input.txt > output.txt
 
