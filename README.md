@@ -238,6 +238,20 @@ def round_to_n_with_five_up(numbers, n):
     - all documented loss-of-function (LoF) variants in this gene. How did you define LoF?
     - If asked to find all regulatory variants that potentially affect this gene, which questions would you ask and how would you proceed?
 12. How would you convert a VCF file to the Plink binary format? How would you do the reverse, and what kind of problems do you anticipate?
+
+A: VCF -> Plink binary format (.bed/.bim/.fam)
+   ```
+   plink --vcf input.vcf --make-bed --out output_prefix
+   ```
+Problems: 1. multi-allelic variants are not supported. 
+         2. Missing genotypes and phenotype.
+      
+   Plink binary format -> VCF
+   ```
+   plink --bfile output_prefix --recode vcf --out converted.vcf
+   ```
+Problems: 1. INFO, QUAL, and FILTER fields are lost 2. Lose phenoyype.
+ 
 13. Write a snippet to reformat a PED file so as to output a file with the following header `sample_name genotype_SNP1 genotype_SNP2 ...` where genotypes are coded VCF-style (e.g `A/C`, the order of the alleles in the output is not important).
 14. A genetic association pipeline starts with a VCF and produces summary statistics for every position. The VCF contains multiallelics and indels. Unfortunately, a program in the pipeline trims all alleles to their first character. Why might allele frequencies not always be equal for a given variant? Find a way to correct the alleles in the association file by using the information from the VCF. Select columns are provided for [the association file](https://github.com/hmgu-itg/challenge/raw/master/data/association.txt.gz). We also provide [a file](https://github.com/hmgu-itg/challenge/raw/master/data/fromVCF.txt.gz) that was created from the VCF using `bcftools query -f '%CHROM %POS %REF %ALT %AN %AC\n'`.
 15. [This file](https://github.com/hmgu-itg/challenge/raw/master/data/mock.eQTL.forChallenge.txt) contains eQTL overlap data for SNPs that arise as signals in GWAS for several phenotypes. Reformat this file to have one line per SNP/phenotype pair, and two additional columns formatted as such : `GENE1(tissue1, tissue2),GENE2(tissue1, tissue3)`, and `GENE1(2),GENE2(2)`. Each line should contain the SNP/phenotype pair, all genes found overlapping and their respective tissues, and all genes found overlapping with the number of tissues.
