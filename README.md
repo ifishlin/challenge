@@ -253,6 +253,46 @@ Problems: 1. multi-allelic variants are not supported.
 Problems: 1. INFO, QUAL, and FILTER fields are lost 2. Lose phenoyype.
  
 13. Write a snippet to reformat a PED file so as to output a file with the following header `sample_name genotype_SNP1 genotype_SNP2 ...` where genotypes are coded VCF-style (e.g `A/C`, the order of the alleles in the output is not important).
+
+```python
+# files configuration
+ped_file = "example.ped"
+output_file = "converted_ped.tsv"
+
+# open files
+ped_f = open(ped_file, "r")
+out_f = open(output_file, "w")
+
+# read all lines 
+lines = ped_f.readlines()
+
+for line_num, line in enumerate(lines):
+    columns = line.strip().split()
+
+    # sample name comes from the second column.
+    sample_name = columns[1]
+
+    # extract SNP genotypes
+    genotypes = []
+    num_snps = (len(columns) - 6) // 2  # calculate the number of SNP
+    for i in range(6, len(columns), 2):
+        alleles = sorted([columns[i], columns[i + 1]])  
+        genotypes.append("/".join(alleles))
+
+    # write the header
+    if line_num == 0:
+        out_f.write("sample_name\t" + "\t".join([f"genotype_SNP{i+1}" for i in range(num_snps)]) + "\n")
+
+    # output
+    out_f.write(sample_name + "\t" + "\t".join(genotypes) + "\n")
+
+# close
+ped_f.close()
+out_f.close()
+
+print("Converted PED file saved as", output_file)
+```
+
 14. A genetic association pipeline starts with a VCF and produces summary statistics for every position. The VCF contains multiallelics and indels. Unfortunately, a program in the pipeline trims all alleles to their first character. Why might allele frequencies not always be equal for a given variant? Find a way to correct the alleles in the association file by using the information from the VCF. Select columns are provided for [the association file](https://github.com/hmgu-itg/challenge/raw/master/data/association.txt.gz). We also provide [a file](https://github.com/hmgu-itg/challenge/raw/master/data/fromVCF.txt.gz) that was created from the VCF using `bcftools query -f '%CHROM %POS %REF %ALT %AN %AC\n'`.
 15. [This file](https://github.com/hmgu-itg/challenge/raw/master/data/mock.eQTL.forChallenge.txt) contains eQTL overlap data for SNPs that arise as signals in GWAS for several phenotypes. Reformat this file to have one line per SNP/phenotype pair, and two additional columns formatted as such : `GENE1(tissue1, tissue2),GENE2(tissue1, tissue3)`, and `GENE1(2),GENE2(2)`. Each line should contain the SNP/phenotype pair, all genes found overlapping and their respective tissues, and all genes found overlapping with the number of tissues.
 16. A researcher wants to conduct a disease association study. However, colleagues warn him that the dataset contains related individuals. He would like to remove relatedness in his dataset, but given his disease is rare, he would also like to maximise the number of cases kept in. Using [a list of samples with disease status](https://github.com/hmgu-itg/challenge/raw/master/data/relateds.pheno.tsv) and [a file containing pairs of individuals above a relatedness threshold](https://github.com/hmgu-itg/challenge/raw/master/data/relateds.tsv), create an exclusion list of samples to remove to help the researcher achieve their goal.
