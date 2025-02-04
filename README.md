@@ -18,7 +18,7 @@ To submit your results, please clone this repository and make your edits. Once y
 3. A user wants to install an `R` package and gets the following [error log](data/error.log). What is likely to cause the error and how can they solve it?
 4. A user is running commands like this one `cat file1 <(cut -d " " -f 1-15,17,18 file2) > file3`. What does this command do? It runs fine on the command line, but then the user includes it into a file with other commands, saves it and runs `chmod +x` on it. However, that line of code throws the following error : `syntax error near unexpected token '('`. What has the user forgotten?
 
-A: Usually, use sh execute script, instead bash. Run it using bash script.sh
+   A: Usually, use sh execute script, instead bash. Run it using bash script.sh
 
 6. A collaborator has sent you [this script](data/EasyQCWrapper.sh). It is a wrapper for a bioinformatics software called `EasyQC`.  Running it, you get the following error: 
 
@@ -45,17 +45,17 @@ A: Usually, use sh execute script, instead bash. Run it using bash script.sh
      - A user wants to know how many jobs they have pending (`PEND`) and running (`RUN`) in each queue. Write a command line to do that (You can use the log above to check your command line). How would they display this on their screen permanently, in real time?
 9. An analysis you need to run on the cluster requires a particular python library, but you do not have administrator rights. IT is on holiday. What do you do?
 
-A: 1. Create a virtual environment
-```
-python -m venv myenv
-source myenv/bin/activate  
-pip install package_name
-```
-2. use Conda
-```
-conda create --name myenv package_name
-conda activate myenv
-```
+   A: 1. Create a virtual environment
+   ```
+   python -m venv myenv
+   source myenv/bin/activate  
+   pip install package_name
+   ```
+   2. use Conda
+   ```
+   conda create --name myenv package_name
+   conda activate myenv
+   ```
 
 9. All major computational tasks in your lab are done via SSH connection to mainframe servers or HPC clusters. A user comes from a Linux (mostly command-line) background but IT only support Windows 10 for laptops. How would you advise them to configure their laptop to make their transition easier?
 
@@ -168,14 +168,12 @@ conda activate myenv
    ```
 3. You are the curator of a genotype dataset with a very strict privacy policy in place. In particular, it should be impossible to tell, given access to a person's genetic data, whether they were part of your study by looking at a dataset you provided. A collaborator is asking you for some data to run tests on their code. What information can you safely contribute from your study? Which data cannot be shared?
 
-    ```
-    Any direct or indirect identifiers (e.g., names, full genotype calls, rare variants) that could reveal whether a specific individual is in the study.
-    How to remove or aggregate personal data?
+    A: Any direct or indirect identifiers (e.g., names, full genotype calls, rare variants) that could reveal whether a specific individual is in the study. How to remove or aggregate personal data?
 
     - Strip direct identifiers (e.g., names, IDs) from your files.
     - Aggregate at the group level (e.g., allele or genotype frequencies) instead of providing individual-level data.
-    - If individual-level data are needed for testing, use anonymized or masked genotypes (remove rare variants, reduce resolution), or provide synthetic data that mimic     real statistics without exposing real subjects. 
-    ```
+    - If individual-level data are needed for testing, use anonymized or masked genotypes (remove rare variants, reduce resolution), or provide synthetic data that mimic real statistics without exposing real subjects. 
+    
 
 4. How do you convert a gzipped VCF to the `bimbam` format? (you may choose to script a solution yourself, or not)
 5. A user sends you a small number of chromosome and positions in build 38 that they want to know the rsID of. 
