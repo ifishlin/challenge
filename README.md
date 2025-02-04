@@ -192,22 +192,23 @@ To submit your results, please clone this repository and make your edits. Once y
 7.	Download the 1000 Genomes sites VCF file for chromosome 21 [here](http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/ALL.chr21_GRCh38_sites.20170504.vcf.gz). We want to compare it to [a locally stored file](data/ALL.chr21_GRCh38_sites.20170504.vcf.gz).
     - What is the fastest way to check the integrity of, or compare, any such downloaded file?
 
-  	```The fastest way to verify whether two files are exactly the same is to compute and compare their MD5 checksums.```
+    A: The fastest way to verify whether two files are exactly the same is to compute and compare their MD5 checksums.
+
     - If you find that the files are indeed different, how do you find their differences? Keep in mind that this kind of file can be very large (>100Gb), your solution should be as fast and memory-efficient as possible.
+
       
-    ```
-    Once you know the files differ (e.g., their MD5 checksums don’t match) and you need to see where they differ, you can use diff. For very large compressed VCF files, a streaming approach is recommended so you don’t have to decompress everything to disk first.
-    ```
+    A: Once you know the files differ (e.g., their MD5 checksums don’t match) and you need to see where they differ, you can use diff. For very large compressed VCF files, a streaming approach is recommended so you don’t have to decompress everything to disk first.
 
     ```
     diff <(zcat file1.vcf.gz) <(zcat file2.vcf.gz)
-    This command decompresses each file on the fly and compares their textual contents. It doesn’t load the entire files into memory at once, which makes it memory‐efficient, and it avoids writing out huge temporary files to disk.
     ```
+    
+    This command decompresses each file on the fly and compares their textual contents. It doesn’t load the entire files into memory at once, which makes it memory‐efficient, and it avoids writing out huge temporary files to disk.
 
     - If you found no differences in the end, what could cause a false alarm?
-    ```
-    1. Differences in header or annotation lines. 2. Line-ending discrepancies (LF vs. CRLF).
-    ```
+    
+    A: 1. Differences in header or annotation lines. 2. Line-ending discrepancies (LF vs. CRLF).
+
 9.	What is the p-value corresponding to standard normal z-scores of 10.35, 29.7, 45.688 and 78.1479?
 10.	We want to round a column of numbers to `n` decimal places, with values with 5 as their rightmost significant digit rounded up. Use the language of your choice.
 
